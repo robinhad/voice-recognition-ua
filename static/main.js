@@ -18,6 +18,7 @@ function resultProcess(data) {
 }
 
 function exportWAV(blob) {
+    actionButton.textContent = "Processing..."
     var data = new FormData()
     data.append('file', blob);
     fetch(`./recognize`, { method: "POST", body: data })
