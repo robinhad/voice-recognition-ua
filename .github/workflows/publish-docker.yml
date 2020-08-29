@@ -11,7 +11,7 @@ jobs:
       - name: Download model file
         uses: dsaltares/fetch-gh-release-asset@master
         with:
-          repo: " robinhad/voice-recognition-ua"
+          repo: "robinhad/voice-recognition-ua"
           version: "latest"
           file: "uk.tflite"
           token: ${{ secrets.YOUR_TOKEN }}
