@@ -1,2 +1,3 @@
 Flask==1.1.2
 deepspeech-tflite==0.7.3
+numpy==1.17.0
