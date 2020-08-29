@@ -21,6 +21,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: robinhad/voice-rec
+          repository: robinhad/voice-recognition-ua/voice-rec
           tag_with_ref: true
 
