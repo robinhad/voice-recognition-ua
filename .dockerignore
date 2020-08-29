@@ -4,5 +4,4 @@ __pycache__/
 .git
 LICENSE
 README.md
-*.tflite
 .github/
