@@ -12,7 +12,7 @@
 <body>
     <h1>Audio Recording Test</h1>
     <p>Talk for 3 seconds, then you will hear your recording played back</p>
-    <button class="btn btn-primary" id="action" onclick="handleAction()">Start recording...</button>
+    <button class="btn btn-primary" id="action" onclick="handleAction()">Start recording (3 sec)</button>
     <div id="result"></div>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
     <script>
@@ -23,12 +23,15 @@
         // shim for AudioContext when it's not avb. 
         var AudioContext = window.AudioContext || window.webkitAudioContext;
         var audioContext; //audio context to help us record
-        var resultNode = document.getElementById('result');
+        const resultNode = document.getElementById('result');
+        const actionButton = document.getElementById('action');
 
         function resultProcess(data) {
             resultNode.textContent = `Довжина тексту: ${data.length} \n
                 Текст: ${data}
-            `
+            `;
+            actionButton.textContent = "Start recording (3 sec)";
+            actionButton.disabled = false;
         }
 
         function exportWAV(blob) {
@@ -39,10 +42,11 @@
                 .then(resultProcess);
         }
         function record() {
+
             var constraints = { audio: true, video: false }
             navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-                console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
-
+                actionButton.textContent = "Recording..."
+                actionButton.disabled = true;
                 /*
                     create an audio context after getUserMedia is called
                     sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
@@ -64,8 +68,6 @@
 
                 //start the recording process
                 rec.record()
-
-                console.log("Recording started");
                 sleep(3000).then(stop);
             })
         }
@@ -79,18 +81,13 @@
 
             //create the wav blob and pass it on to createDownloadLink
             rec.exportWAV(exportWAV);
-            console.log("Recording stopped")
-
         }
 
 
         const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
         async function handleAction() {
-            const actionButton = document.getElementById('action');
-            actionButton.disabled = true;
             record();
-            actionButton.disabled = false;
         }
     </script>
 </body>
