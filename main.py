@@ -1,5 +1,8 @@
-from flask import Flask, render_template
-app = Flask(__name__)
+from flask import Flask, render_template, request
+from io import BytesIO
+from client import client
+
+app = Flask(__name__,)
 
 
 @app.route('/')
@@ -9,4 +12,9 @@ def index():
 
 @app.route('/recognize', methods=["POST"])
 def recognize():
-    return 'Hello, World!'
+    file = request.files['file']
+    audio = BytesIO()
+    file.save(audio)
+    audio.seek(0)
+    result = client(audio)
+    return result

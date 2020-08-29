@@ -13,49 +13,83 @@
     <h1>Audio Recording Test</h1>
     <p>Talk for 3 seconds, then you will hear your recording played back</p>
     <button class="btn btn-primary" id="action" onclick="handleAction()">Start recording...</button>
+    <div id="result"></div>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
     <script>
-        const recordAudio = () =>
-            new Promise(async resolve => {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond: 16000 });
-                const audioChunks = [];
+        var gumStream; 						//stream from getUserMedia()
+        var rec; 							//Recorder.js object
+        var input; 							//MediaStreamAudioSourceNode we'll be recording
 
-                mediaRecorder.addEventListener("dataavailable", event => {
-                    audioChunks.push(event.data);
-                });
+        // shim for AudioContext when it's not avb. 
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioContext; //audio context to help us record
+        var resultNode = document.getElementById('result');
 
-                const start = () => mediaRecorder.start();
+        function resultProcess(data) {
+            resultNode.textContent = `Довжина тексту: ${data.length} \n
+                Текст: ${data}
+            `
+        }
 
-                const stop = () =>
-                    new Promise(resolve => {
-                        mediaRecorder.addEventListener("stop", () => {
-                            const audioBlob = new Blob(audioChunks);
+        function exportWAV(blob) {
+            var data = new FormData()
+            data.append('file', blob);
+            fetch(`./recognize`, { method: "POST", body: data })
+                .then(response => response.text())
+                .then(resultProcess);
+        }
+        function record() {
+            var constraints = { audio: true, video: false }
+            navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+                console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
 
-                            const audioUrl = URL.createObjectURL(audioBlob);
-                            fetch(`./recognize`, { method: "POST", body: audioBlob })
-                                .then(response => console.log(response.text()))
-                            const audio = new Audio(audioUrl);
-                            const play = () => audio.play();
-                            resolve({ audioBlob, audioUrl, play });
-                        });
+                /*
+                    create an audio context after getUserMedia is called
+                    sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
+                    the sampleRate defaults to the one set in your OS for your playback device
+                */
+                audioContext = new AudioContext();
 
-                        mediaRecorder.stop();
-                    });
+                /*  assign to gumStream for later use  */
+                gumStream = stream;
 
-                resolve({ start, stop });
-            });
+                /* use the stream */
+                input = audioContext.createMediaStreamSource(stream);
+
+                /* 
+                    Create the Recorder object and configure to record mono sound (1 channel)
+                    Recording 2 channels  will double the file size
+                */
+                rec = new Recorder(input, { numChannels: 1 })
+
+                //start the recording process
+                rec.record()
+
+                console.log("Recording started");
+                sleep(3000).then(stop);
+            })
+        }
+
+
+        function stop() {
+            rec.stop();
+
+            //stop microphone access
+            gumStream.getAudioTracks()[0].stop();
+
+            //create the wav blob and pass it on to createDownloadLink
+            rec.exportWAV(exportWAV);
+            console.log("Recording stopped")
+
+        }
+
 
         const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
-        const handleAction = async () => {
-            const recorder = await recordAudio();
+        async function handleAction() {
             const actionButton = document.getElementById('action');
             actionButton.disabled = true;
-            recorder.start();
-            await sleep(3000);
-            const audio = await recorder.stop();
-            audio.play();
-            await sleep(3000);
+            record();
             actionButton.disabled = false;
         }
     </script>
