@@ -13,12 +13,12 @@ function resultProcess(data) {
     resultNode.textContent = `Довжина тексту: ${data.length} \n
         Текст: ${data}
     `;
-    actionButton.textContent = "Start recording (3 sec)";
+    actionButton.textContent = "Почати запис (3 сек)";
     actionButton.disabled = false;
 }
 
 function exportWAV(blob) {
-    actionButton.textContent = "Processing..."
+    actionButton.textContent = "Обробляється..."
     var data = new FormData()
     data.append('file', blob);
     fetch(`./recognize`, { method: "POST", body: data })
@@ -29,7 +29,7 @@ function record() {
 
     var constraints = { audio: true, video: false }
     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-        actionButton.textContent = "Recording..."
+        actionButton.textContent = "Запис..."
         actionButton.disabled = true;
         /*
             create an audio context after getUserMedia is called
