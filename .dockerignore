@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+.env
+.git
+LICENSE
+README.md
+*.tflite
