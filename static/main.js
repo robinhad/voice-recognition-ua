@@ -8,6 +8,7 @@ var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext; //audio context to help us record
 const resultNode = document.getElementById('result');
 const actionButton = document.getElementById('action');
+const langSelector = document.getElementById('lang');
 
 function resultProcess(data) {
     resultNode.textContent = `Довжина тексту: ${data.length} \n
@@ -21,6 +22,7 @@ function exportWAV(blob) {
     actionButton.textContent = "Обробляється..."
     var data = new FormData()
     data.append('file', blob);
+    data.append("lang", langSelector.value);
     fetch(`./recognize`, { method: "POST", body: data })
         .then(response => response.text())
         .then(resultProcess);
@@ -29,7 +31,8 @@ function record() {
 
     var constraints = { audio: true, video: false }
     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-        actionButton.textContent = "Запис..."
+        actionButton.textContent = "Запис...";
+        resultNode.textContent = "";
         actionButton.disabled = true;
         /*
             create an audio context after getUserMedia is called
