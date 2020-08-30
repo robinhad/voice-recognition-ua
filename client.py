@@ -89,10 +89,18 @@ class VersionAction(argparse.Action):
         exit(0)
 
 
-def client(audio_file):
+def client(audio_file, lang="uk"):
     model_load_start = timer()
     # sphinx-doc: python_ref_model_start
-    ds = Model("./uk.tflite")
+    model_path = "uk.tflite"
+    if lang not in ["en", "uk"]:
+        lang = "uk"
+    if lang == "uk":
+        model_path = "./uk.tflite"
+    if lang == "en":
+        model_path = "./deepspeech-0.7.3-models.tflite"
+    print(lang)
+    ds = Model(model_path)
     # sphinx-doc: python_ref_model_stop
     model_load_end = timer() - model_load_start
     print('Loaded model in {:.3}s.'.format(model_load_end), file=sys.stderr)

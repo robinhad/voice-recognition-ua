@@ -13,10 +13,11 @@ def index():
 @app.route('/recognize', methods=["POST"])
 def recognize():
     file = request.files['file']
+    lang = request.form["lang"]
     audio = BytesIO()
     file.save(audio)
     audio.seek(0)
-    result = client(audio)
+    result = client(audio, lang)
     return result
 
 
