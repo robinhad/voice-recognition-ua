@@ -10,22 +10,18 @@ from deepspeech import Model, version
 from timeit import default_timer as timer
 
 
-uk_model = Model("./uk.tflite")
-en_model = Model("./deepspeech-0.7.3-models.tflite")
-
-
 def client(audio_file, lang="uk"):
     model_load_start = timer()
     # sphinx-doc: python_ref_model_start
-    model = uk_model
+    model = "./uk.tflite"
     if lang not in ["en", "uk"]:
         lang = "uk"
     if lang == "uk":
-        model = uk_model
+        model = "./uk.tflite"
     if lang == "en":
-        model = en_model
+        model = "./deepspeech-0.7.3-models.tflite"
 
-    ds = model
+    ds = Model(model)
     # sphinx-doc: python_ref_model_stop
     model_load_end = timer() - model_load_start
     print('Loaded model in {:.3}s.'.format(model_load_end), file=sys.stderr)
