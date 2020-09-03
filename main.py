@@ -3,6 +3,7 @@ from io import BytesIO
 from client import client
 
 app = Flask(__name__,)
+app.config['MAX_CONTENT_LENGTH'] = 120 * 1024
 
 
 @app.route('/')
