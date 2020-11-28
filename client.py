@@ -19,7 +19,7 @@ def client(audio_file, lang="uk"):
     if lang == "uk":
         model = "./uk.tflite"
     if lang == "en":
-        model = "./deepspeech-0.7.3-models.tflite"
+        model = "./deepspeech-0.9.1-models.tflite"
 
     ds = Model(model)
     # sphinx-doc: python_ref_model_stop

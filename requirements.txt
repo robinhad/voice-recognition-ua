@@ -1,4 +1,4 @@
 Flask==1.1.2
-deepspeech-tflite==0.7.3
+deepspeech-tflite==0.9.1
 numpy==1.17.0
 uwsgi==2.0.19.1
