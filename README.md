@@ -1,9 +1,9 @@
 # voice-recognition-ua
-This is a repository with aim to apply [DeepSpeech](https://github.com/mozilla/DeepSpeech "DeepSpeech") (state-of-the-art speech recognition model) on Ukrainian language.
-Due to small size of dataset (20 hours), don't expect production-grade performance.
-Contribute your voice to [Common Voice project](https://commonvoice.mozilla.org/uk "Common Voice") yourself, so we can improve model accuracy. 
-You can see online demo here https://voice-recognition-ua.herokuapp.com/ (your voice is not stored).  
-Source code is in this repository together with auto-deploy pipeline scripts.
+This is a repository with aim to apply [DeepSpeech](https://github.com/mozilla/DeepSpeech "DeepSpeech") (state-of-the-art speech recognition model) on Ukrainian language.  
+You can see online demo here: https://voice-recognition-ua.herokuapp.com (your voice is not stored).  
+Source code is in this repository together with auto-deploy pipeline scripts.  
+P.S. Due to small size of dataset (20 hours), don't expect production-grade performance.  
+Contribute your voice to [Common Voice project](https://commonvoice.mozilla.org/uk "Common Voice") yourself, so we can improve model accuracy.  
 
 ## Pre-run requirements
 Make sure to download:
