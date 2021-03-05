@@ -30,6 +30,9 @@ app.config['MAX_CONTENT_LENGTH'] = 120 * 1024
 
 @app.route('/')
 def index():
+    bot.remove_webhook()
+    bot.set_webhook(
+        url='https://voice-recognition-ua.herokuapp.com/' + TOKEN)
     return render_template('hello.html')
 
 
@@ -44,18 +47,10 @@ def recognize():
     return result
 
 
-@app.route('/bot/' + TOKEN, methods=['POST'])
+@app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates(
         [telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "!", 200
-
-
-@app.route("/bot")
-def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(
-        url='https://voice-recognition-ua.herokuapp.com/bot/' + TOKEN)
     return "!", 200
 
 
