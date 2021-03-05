@@ -23,7 +23,7 @@ START_MSG = '''Вітання!
 FIRST_STEP = '''Використовувати бота просто: надішліть аудіоповідомлення і чекайте відповіді'''
 
 
-bot = telebot.TeleBot(TOKEN, parse_mode=None)
+bot = telebot.TeleBot(TOKEN, parse_mode=None, threaded=False)
 app = Flask(__name__,)
 
 
