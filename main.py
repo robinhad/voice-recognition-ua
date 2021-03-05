@@ -79,13 +79,17 @@ def process_voice_message(message):
 
     # do the recognition
     # get the recognized text
-    text = client(source_audio)
-    # no results
-    if not text:
-        bot.reply_to(message, 'Я не зміг розпізнати 😢')
-    else:
-        # send the recognized text
-        bot.reply_to(message, text)
+    try:
+        text = client(output_audio)
+        # no results
+        if not text:
+            bot.reply_to(message, 'Я не зміг розпізнати 😢')
+        else:
+            # send the recognized text
+            bot.reply_to(message, text)
+    except Exception as e:
+        logging.log(logging.ERROR, str(e))
+        bot.reply_to(message, 'Трапилась помилка 😢')
 
 
 if __name__ == '__main__':
