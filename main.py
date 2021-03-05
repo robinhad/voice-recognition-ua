@@ -25,7 +25,6 @@ FIRST_STEP = '''Використовувати бота просто: надіш
 
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 app = Flask(__name__,)
-app.config['MAX_CONTENT_LENGTH'] = 120 * 1024
 
 
 @app.route('/')
