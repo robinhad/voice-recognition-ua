@@ -111,34 +111,43 @@ def one_sample(sample):
 def _maybe_convert_set(dataset_dir, audio_dir, filter_obj, space_after_every_character=None, rows=None):
     # iterate over all data lists and write converted version near them
     speaker_iterator = 1
-
     samples = []
+    total_file_dict = dict()
     for subdir, dirs, files in os.walk(dataset_dir):
         for file in files:
             # Get audiofile path and transcript for each sentence in tsv
-            if file == "txt.final.data":
+            if file.endswith(".data"):
                 file_path = os.path.join(subdir, file)
                 file = open(file_path, mode="r")
                 data = []
+                file_folder = os.path.join(
+                    os.path.dirname(subdir), "wav")
+                file_dict = dict()
                 for row in file.readlines():
                     file_name, transcript = row.replace(
                         " \n", "").split(" ", 1)
-
                     if file_name.endswith(".wav"):
                         pass
                     elif file_name.endswith(".mp3"):
                         pass
                     elif file_name.find(".") == -1:
                         file_name += ".wav"
-                    file_name = os.path.join(os.path.join(
-                        os.path.dirname(subdir), "wav"), file_name)
-                    data.append(
-                        (file_name, transcript, speaker_iterator))
-                    speaker_iterator += 1
+
+                    file_name = os.path.join(file_folder, file_name)
+                    file_dict[file_name] = transcript
 
                 file.close()
 
-                samples += data
+                for wav_subdir, wav_dirs, wav_files in os.walk(file_folder):
+                    for wav_file in wav_files:
+                        wav_file_path = os.path.join(wav_subdir, wav_file)
+                        if file_dict.get(wav_file_path) is not None:
+                            total_file_dict[wav_file_path] = file_dict[wav_file_path]
+
+    for key in total_file_dict.keys():
+        samples.append((key, total_file_dict[key], speaker_iterator))
+        speaker_iterator += 1
+    del(total_file_dict)
 
     if rows is None:
         rows = []
@@ -199,7 +208,7 @@ def _maybe_convert_wav(mp3_filename, wav_filename):
         transformer.convert(samplerate=SAMPLE_RATE, n_channels=CHANNELS)
         try:
             transformer.build(mp3_filename, wav_filename)
-        except Exception as e: # TODO: improve exception handling
+        except Exception as e:  # TODO: improve exception handling
             pass
 
 
