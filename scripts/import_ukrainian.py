@@ -22,6 +22,7 @@ from deepspeech_training.util.importers import (
     print_import_report,
 )
 from ds_ctcdecoder import Alphabet
+import re
 
 FIELDNAMES = ["wav_filename", "wav_filesize", "transcript"]
 SAMPLE_RATE = 16000
@@ -108,6 +109,12 @@ def one_sample(sample):
     return (counter, rows)
 
 
+def convert_transcript(transcript):
+    transcript = re.sub("[а-я](')[а-я]", "’", transcript)
+    transcript = transcript.replace("-", " ")
+    return transcript.strip()
+
+
 def _maybe_convert_set(dataset_dir, audio_dir, filter_obj, space_after_every_character=None, rows=None):
     # iterate over all data lists and write converted version near them
     speaker_iterator = 1
@@ -124,8 +131,13 @@ def _maybe_convert_set(dataset_dir, audio_dir, filter_obj, space_after_every_cha
                     os.path.dirname(subdir), "wav")
                 file_dict = dict()
                 for row in file.readlines():
-                    file_name, transcript = row.replace(
-                        " \n", "").split(" ", 1)
+                    if row.isspace():
+                        continue
+                    splitted_row = row.replace("\n", "").replace(
+                        " wav ", ".wav  ").split(" ", 1)
+                    if len(splitted_row) != 2:
+                        continue
+                    file_name, transcript = splitted_row
                     if file_name.endswith(".wav"):
                         pass
                     elif file_name.endswith(".mp3"):
@@ -133,8 +145,10 @@ def _maybe_convert_set(dataset_dir, audio_dir, filter_obj, space_after_every_cha
                     elif file_name.find(".") == -1:
                         file_name += ".wav"
 
-                    file_name = os.path.join(file_folder, file_name)
-                    file_dict[file_name] = transcript
+                    if file_name.startswith("/"):
+                        file_name = file_name[1::]
+                    file_name = os.path.join(dataset_dir, file_name)
+                    file_dict[file_name] = convert_transcript(transcript)
 
                 file.close()
 
@@ -176,7 +190,8 @@ def _maybe_convert_set(dataset_dir, audio_dir, filter_obj, space_after_every_cha
         print("Writing CSV file for DeepSpeech.py as: ", output_csv)
         writer = csv.DictWriter(output_csv_file, fieldnames=FIELDNAMES)
         writer.writeheader()
-        bar = progressbar.ProgressBar(max_value=len(rows), widgets=SIMPLE_BAR)
+        bar = progressbar.ProgressBar(
+            max_value=len(rows), widgets=SIMPLE_BAR)
         for filename, file_size, transcript, speaker in bar(rows):
             if space_after_every_character:
                 writer.writerow(
