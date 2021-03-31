@@ -130,3 +130,5 @@ dmypy.json
 
 *.tflite
 .DS_Store
+
+/data
