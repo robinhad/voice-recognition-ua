@@ -14,14 +14,9 @@ def client(audio_file, lang="uk"):
     model_load_start = timer()
     # sphinx-doc: python_ref_model_start
     model = "./uk.tflite"
-    if lang not in ["en", "uk"]:
-        lang = "uk"
-    if lang == "uk":
-        model = "./uk.tflite"
-    if lang == "en":
-        model = "./deepspeech-0.9.1-models.tflite"
 
     ds = Model(model)
+    ds.enableExternalScorer("kenlm.scorer")
     # sphinx-doc: python_ref_model_stop
     model_load_end = timer() - model_load_start
     print('Loaded model in {:.3}s.'.format(model_load_end), file=sys.stderr)
