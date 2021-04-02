@@ -1,27 +1,42 @@
 # voice-recognition-ua
-This is a repository with aim to apply [DeepSpeech](https://github.com/mozilla/DeepSpeech "DeepSpeech") (state-of-the-art speech recognition model) on Ukrainian language.  
+This is a repository with aim to apply [Coqui STT](https://github.com/coqui-ai/STT "STT")(formerly [DeepSpeech](https://github.com/mozilla/DeepSpeech)) (state-of-the-art speech recognition model) on Ukrainian language.  
 You can see online demo here: https://voice-recognition-ua.herokuapp.com (your voice is not stored).  
 Source code is in this repository together with auto-deploy pipeline scripts.  
-P.S. Due to small size of dataset (20 hours), don't expect production-grade performance.  
+P.S. Due to small size of dataset (50 hours), don't expect production-grade performance.  
 Contribute your voice to [Common Voice project](https://commonvoice.mozilla.org/uk "Common Voice") yourself, so we can improve model accuracy.  
+
+<h2>CAUTION: THIS MODEL AND SCORER IS PUBLISHED ONLY FOR RESEARCH AND NON-COMMERCIAL USE.</h2>
+
+Checkout latest releases here: https://github.com/robinhad/voice-recognition-ua/releases/.
+
+If you'd like to check out different models for Ukrainian language, please visit https://github.com/egorsmkv/speech-recognition-uk.
 
 ## Pre-run requirements
 Make sure to download:
-1. https://github.com/robinhad/voice-recognition-ua/releases/download/v0.2/uk.tflite
-3. https://github.com/mozilla/DeepSpeech/releases/download/v0.9.1/deepspeech-0.9.1-models.tflite
+1. https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/uk.tflite
+2. https://github.com/robinhad/voice-recognition-ua/releases/download/v0.4/kenlm.scorer
 
 ## How to launch 
 ```
 export FLASK_APP=main.py
+export TOKEN=<Telegram bot API key>
 flask run
 ```
 
 # How to train your own model
 
+Guides for importing data are available in [/scripts](/scripts) folder.
+
 Most of the guide is took from there:
-https://deepspeech.readthedocs.io/en/v0.9.1/TRAINING.html
+https://deepspeech.readthedocs.io/en/v0.9.3/TRAINING.html
+
+Disclaimer: if you would like to continue working on the model, use https://github.com/coqui-ai/STT (this is former DeepSpeech team, where development continues).
+
 
 ## Steps:
+
+<details>
+ <summary>This guide could be outdated, please be aware.</summary>
 1. Create g4dn.xlarge instance on AWS, Deep Learning AMI (Ubuntu 18.04), 150 GB of space.
 
 2. Install Python requirements:  
@@ -126,8 +141,10 @@ WER - Word Error Rate, calculates how much characters were guessed correctly.
 CER - Character Error Rate, calculates how much characters were guessed correctly.
 Here we have WER 95% and CER 36%.  
 It is high because we don't use scorer (language model that maps chacter sequence to the closest word match) during training, you can improve performance if you create scorer for Ukrainian language. As a text corpus you can use Wikipedia articles.
-```
-Test on ../cv-corpus-5.1-2020-06-22/uk/clips/test.csv - WER: 0.950863, CER: 0.357779, loss: 59.444176
+
+<details>
+<summary>Test on ../cv-corpus-5.1-2020-06-22/uk/clips/test.csv - WER: 0.950863, CER: 0.357779, loss: 59.444176</summary>
+
 --------------------------------------------------------------------------------
 Best WER: 
 --------------------------------------------------------------------------------
@@ -210,7 +227,8 @@ WER: 2.000000, CER: 0.333333, loss: 10.796988
  - src: "легітимність"
  - res: "вегі пимнсть"
 --------------------------------------------------------------------------------
-```
+</details>
+
 16. To export model for later usage:
 ```
 mkdir model
@@ -230,3 +248,4 @@ python3 DeepSpeech.py \
     --epochs 0
 ```
 For advanced usage please refer to https://deepspeech.readthedocs.io/en/v0.9.1/USING.html
+</details>
