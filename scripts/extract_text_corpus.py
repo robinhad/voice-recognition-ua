@@ -11,7 +11,7 @@ text_file = open(OUT_FILE, mode="a")
 tokenizer = nltk.SpaceTokenizer()
 paranthesis_regex = re.compile(r'\(.*\)')
 allowed_chars = ["а", "б", "в", "г", "ґ", "д", "е", "є", "ж", "з", "и", "і", "ї", "й", "к", "л",
-                 "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ь", "ю", "я", "-", "'"]
+                 "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ь", "ю", "я", "-", "’"]
 
 for subdir, dirs, files in os.walk(FOLDER):
     for file in files:
@@ -25,6 +25,7 @@ for subdir, dirs, files in os.walk(FOLDER):
             input_file = open(file_path, encoding="cp1251")
             cleaned_text = input_file.read()
         cleaned_text = cleaned_text.lower()
+        cleaned_text = cleaned_text.replace("'", "’")
         cleaned_text = paranthesis_regex.sub('', cleaned_text)
         cleaned_text = cleaned_text.strip()
         cleaned_text = cleaned_text.split(".")
