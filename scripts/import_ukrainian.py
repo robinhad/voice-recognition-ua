@@ -111,7 +111,7 @@ def one_sample(sample):
 
 def convert_transcript(transcript):
     transcript = transcript.replace("'", "’")
-    transcript = transcript.replace("-", " ")
+    # transcript = transcript.replace("-", " ")
     return transcript.strip()
 
 
