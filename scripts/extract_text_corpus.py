@@ -1,3 +1,4 @@
+# this script is used for importing random texts from folder and converting it for scorer
 import os
 import nltk
 import re
@@ -32,10 +33,19 @@ for subdir, dirs, files in os.walk(FOLDER):
             text = text.strip()
 
             words = tokenizer.tokenize(text)
-            words = [i for i in words if i.isalnum()]
             words = [i for i in words if not i.isdigit()]
-            words = [i for i in words if len(i) > 1]
-            if any([any(j not in allowed_chars for j in i) for i in words]):
+            new_words = []
+            for word in words:
+                include = True
+                for letter in word:
+                    if word.startswith("-"):
+                        word = word[1:]
+                    if letter not in allowed_chars:
+                        include = False
+                if include:
+                    new_words.append(word)
+            words = new_words
+            if all([len(i) <= 1 for i in words]):
                 continue
             if len(words) == 0:
                 continue
