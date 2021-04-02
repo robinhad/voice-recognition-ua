@@ -16,7 +16,7 @@ def client(audio_file, lang="uk"):
     model = "./uk.tflite"
 
     ds = Model(model)
-    ds.enableExternalScorer("kenlm.scorer")
+    # ds.enableExternalScorer("kenlm.scorer")
     # sphinx-doc: python_ref_model_stop
     model_load_end = timer() - model_load_start
     print('Loaded model in {:.3}s.'.format(model_load_end), file=sys.stderr)
