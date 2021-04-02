@@ -110,7 +110,7 @@ def one_sample(sample):
 
 
 def convert_transcript(transcript):
-    transcript = re.sub("[а-я](')[а-я]", "’", transcript)
+    transcript = transcript.replace("'", "’")
     transcript = transcript.replace("-", " ")
     return transcript.strip()
 
