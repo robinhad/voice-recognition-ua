@@ -5,7 +5,7 @@ Source code is in this repository together with auto-deploy pipeline scripts.
 P.S. Due to small size of dataset (50 hours), don't expect production-grade performance.  
 Contribute your voice to [Common Voice project](https://commonvoice.mozilla.org/uk "Common Voice") yourself, so we can improve model accuracy.  
 
-<h2>CAUTION: THIS MODEL AND SCORER IS PUBLISHED ONLY FOR RESEARCH AND NON-COMMERCIAL USE.</h2>
+This model is licensed under [Creative Commons Attribution-NonCommercial 4.0 International License](./LICENSE).
 
 Checkout latest releases here: https://github.com/robinhad/voice-recognition-ua/releases/.
 
