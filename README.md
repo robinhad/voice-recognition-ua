@@ -1,3 +1,13 @@
+---
+title: "Ukrainian Speech-to-Text"
+emoji: 🐸
+colorFrom: blue
+colorTo: yellow
+sdk: gradio
+app_file: app.py
+pinned: false
+---
+
 # voice-recognition-ua
 This is a repository with aim to apply [Coqui STT](https://github.com/coqui-ai/STT "STT")(formerly [DeepSpeech](https://github.com/mozilla/DeepSpeech)) (state-of-the-art speech recognition model) on Ukrainian language.  
 You can see online demo here: https://voice-recognition-ua.herokuapp.com (your voice is not stored).  
