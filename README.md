@@ -23,6 +23,6 @@ If you'd like to check out different models for Ukrainian language, please visit
 Guides for importing data are available in [/scripts](/scripts) folder.
 
 # 🤝 Attribution
-[@egorsmkv](https://github.com/egorsmkv) - organized [Ukrainian Speech recognition community](https://github.com/egorsmkv/speech-recognition-uk)
-[@tarasfrompir](https://github.com/tarasfrompir) - created amazing Ukrainian Speech-to-Text dataset.
-[@AlexeyBoiler](https://github.com/AlexeyBoiler) - hosted Ukrainian Speech-to-Text dataset.
+[@egorsmkv](https://github.com/egorsmkv) - organized [Ukrainian Speech recognition community](https://github.com/egorsmkv/speech-recognition-uk).  
+[@tarasfrompir](https://github.com/tarasfrompir) - created amazing Ukrainian Speech-to-Text dataset.  
+[@AlexeyBoiler](https://github.com/AlexeyBoiler) - hosted Ukrainian Speech-to-Text dataset.  
