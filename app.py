@@ -10,12 +10,12 @@ from stt import Model
 
 
 MODEL_NAMES = [
-    "With scorer",
+    #    "With scorer",
     "No scorer"
 ]
 
 # download model
-version = "v0.4"
+version = "v0.5"
 storage_url = f"https://github.com/robinhad/voice-recognition-ua/releases/download/{version}"
 model_name = "uk.tflite"
 scorer_name = "kenlm.scorer"
@@ -98,5 +98,5 @@ iface = gr.Interface(
 )
 
 download(model_link, model_name)
-download(scorer_link, scorer_name)
+#download(scorer_link, scorer_name)
 iface.launch()
