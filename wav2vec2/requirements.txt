@@ -1,0 +1,7 @@
+datasets==2.4.0
+transformers==4.21.2
+#huggingface_hub==0.1
+#torchaudio
+librosa
+jiwer
+# install torch!
