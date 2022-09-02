@@ -10,12 +10,12 @@ from stt import Model
 
 
 MODEL_NAMES = [
-    #    "With scorer",
+    "With scorer",
     "No scorer"
 ]
 
 # download model
-version = "v0.5"
+version = "v0.4"
 storage_url = f"https://github.com/robinhad/voice-recognition-ua/releases/download/{version}"
 model_name = "uk.tflite"
 scorer_name = "kenlm.scorer"
@@ -73,8 +73,8 @@ def _convert_audio(audio_data: np.array, sample_rate: int):
         sample_width=2,
         frame_rate=sample_rate
     )
-    wav_file.set_frame_rate(16000).set_channels(
-        1).export(output_audio, "wav", codec="pcm_s16le")
+    wav_file = wav_file.set_frame_rate(16000).set_channels(1)
+    wav_file.export(output_audio, "wav", codec="pcm_s16le")
     output_audio.seek(0)
     return output_audio
 
@@ -98,5 +98,5 @@ iface = gr.Interface(
 )
 
 download(model_link, model_name)
-#download(scorer_link, scorer_name)
+download(scorer_link, scorer_name)
 iface.launch()
