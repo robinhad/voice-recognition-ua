@@ -7,11 +7,11 @@ from pydub.audio_segment import AudioSegment
 import requests
 from os.path import exists
 from stt import Model
-
+from datetime import datetime
 
 MODEL_NAMES = [
-    "With scorer",
-    "No scorer"
+    "No scorer",
+    "With scorer"
 ]
 
 # download model
@@ -52,12 +52,11 @@ def download(url, file_name):
 
 def stt(audio: Tuple[int, np.array], model_name: str):
     sample_rate, audio = audio
+    print(f"Input sample rate: {sample_rate}. Audio file length: {round(audio.shape[0]/sample_rate ,2)}")
     use_scorer = True if model_name == "With scorer" else False
 
-    if sample_rate != 16000:
-        raise ValueError("Incorrect sample rate.")
-
     recognized_result = client(audio, sample_rate, use_scorer)
+    print(f"Time: {datetime.utcnow()}. Transcript: `{recognized_result}`. Scorer: {use_scorer}.")
 
     return recognized_result
 
@@ -67,14 +66,13 @@ def _convert_audio(audio_data: np.array, sample_rate: int):
     source_audio.write(audio_data)
     source_audio.seek(0)
     output_audio = BytesIO()
-    wav_file = AudioSegment.from_raw(
+    wav_file: AudioSegment = AudioSegment.from_raw(
         source_audio,
         channels=1,
-        sample_width=2,
+        sample_width=4,
         frame_rate=sample_rate
     )
-    wav_file = wav_file.set_frame_rate(16000).set_channels(1)
-    wav_file.export(output_audio, "wav", codec="pcm_s16le")
+    wav_file.export(output_audio, "wav", codec="pcm_s16le", parameters=["-ar", "16k"])
     output_audio.seek(0)
     return output_audio
 
