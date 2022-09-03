@@ -18,6 +18,7 @@ Source code is in this repository together with auto-deploy pipeline scripts.
 # 🧮 Models
 Model name  |  CER  |  WER  | License | Note
 :-------------------------|:-------------------------|:-------------------------|:-------------------------|:-------------------------
+[Wav2Vec2](https://github.com/robinhad/voice-recognition-ua/releases/tag/release%2Fwav2vec2-v0.1) | 6,01% | 27,99% | MIT | Common Voice 8 dataset, `test` set used as validation
 [DeepSpeech with Wiki LM](https://github.com/robinhad/voice-recognition-ua/releases/tag/v0.4) | 12% | 30,65% | CC-BY-NC 4.0 | Common Voice 6 dataset
 [DeepSpeech](https://github.com/robinhad/voice-recognition-ua/releases/tag/v0.4) | 16% | 57% | CC-BY-NC 4.0 | Common Voice 6 dataset
 
