@@ -8,7 +8,8 @@ import requests
 from os.path import exists
 from stt import Model
 from datetime import datetime
-
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+import torch
 
 # download model
 version = "v0.4"
@@ -17,6 +18,10 @@ model_name = "uk.tflite"
 scorer_name = "kenlm.scorer"
 model_link = f"{storage_url}/{model_name}"
 scorer_link = f"{storage_url}/{scorer_name}"
+
+model = Wav2Vec2ForCTC.from_pretrained("robinhad/wav2vec2-xls-r-300m-uk")#.to("cuda")
+processor = Wav2Vec2Processor.from_pretrained("robinhad/wav2vec2-xls-r-300m-uk")
+# TODO: download config.json, pytorch_model.bin, preprocessor_config.json, tokenizer_config.json, vocab.json, added_tokens.json, special_tokens.json
 
 def download(url, file_name):
     if not exists(file_name):
@@ -37,6 +42,16 @@ def deepspeech(audio: np.array, use_scorer=False):
 
     return result
 
+def wav2vec2(audio: np.array):
+    input_dict = processor(audio, sampling_rate=16000, return_tensors="pt", padding=True)
+    with torch.no_grad():
+        output = model(input_dict.input_values.float())
+
+    logits = output.logits
+
+    pred_ids = torch.argmax(logits, dim=-1)[0]
+
+    return processor.decode(pred_ids)
 
 def inference(audio: Tuple[int, np.array]):
     print("=============================")
@@ -50,7 +65,8 @@ def inference(audio: Tuple[int, np.array]):
 
     transcripts = []
 
-    transcripts.append("")
+    transcripts.append(wav2vec2(audio))
+    print(f"Wav2Vec2: `{transcripts[-1]}`")
     transcripts.append(deepspeech(audio, use_scorer=True))
     print(f"Deepspeech with LM: `{transcripts[-1]}`")
     transcripts.append(deepspeech(audio))
