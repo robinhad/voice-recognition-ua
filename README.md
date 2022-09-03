@@ -36,7 +36,7 @@ Guides for training are available in corresponding folders for each model.
 If you like my work, please support here: https://send.monobank.ua/jar/48iHq4xAXm
 
 # 🤝 Attribution
-[@robinhad](https://github.com/robinhad) - model training. 
+[@robinhad](https://github.com/robinhad) - model training.  
 [@egorsmkv](https://github.com/egorsmkv) - organized [Ukrainian Speech recognition community](https://github.com/egorsmkv/speech-recognition-uk).  
 [@tarasfrompir](https://github.com/tarasfrompir) - created synthetic 1200h Ukrainian Speech-to-Text dataset.  
 [@AlexeyBoiler](https://github.com/AlexeyBoiler) - hosted Ukrainian Speech-to-Text dataset.  
