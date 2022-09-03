@@ -9,10 +9,6 @@ from os.path import exists
 from stt import Model
 from datetime import datetime
 
-MODEL_NAMES = [
-    "No scorer",
-    "With scorer"
-]
 
 # download model
 version = "v0.4"
@@ -21,24 +17,6 @@ model_name = "uk.tflite"
 scorer_name = "kenlm.scorer"
 model_link = f"{storage_url}/{model_name}"
 scorer_link = f"{storage_url}/{scorer_name}"
-
-
-def client(audio_data: np.array, sample_rate: int, use_scorer=False):
-    output_audio = _convert_audio(audio_data, sample_rate)
-
-    fin = wave.open(output_audio, 'rb')
-    audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
-
-    fin.close()
-
-    ds = Model(model_name)
-    if use_scorer:
-        ds.enableExternalScorer("kenlm.scorer")
-
-    result = ds.stt(audio)
-
-    return result
-
 
 def download(url, file_name):
     if not exists(file_name):
@@ -50,18 +28,40 @@ def download(url, file_name):
         print(f"Found {file_name}. Skipping download...")
 
 
-def stt(audio: Tuple[int, np.array], model_name: str):
-    sample_rate, audio = audio
-    print(f"Input sample rate: {sample_rate}. Audio file length: {round(audio.shape[0]/sample_rate ,2)}")
-    use_scorer = True if model_name == "With scorer" else False
+def deepspeech(audio: np.array, use_scorer=False):
+    ds = Model(model_name)
+    if use_scorer:
+        ds.enableExternalScorer("kenlm.scorer")
 
-    recognized_result = client(audio, sample_rate, use_scorer)
-    print(f"Time: {datetime.utcnow()}. Transcript: `{recognized_result}`. Scorer: {use_scorer}.")
+    result = ds.stt(audio)
 
-    return recognized_result
+    return result
 
+
+def inference(audio: Tuple[int, np.array]):
+    print("=============================")
+    print(f"Time: {datetime.utcnow()}.`")
+
+    output_audio = _convert_audio(audio[1], audio[0])
+
+    fin = wave.open(output_audio, 'rb')
+    audio = np.frombuffer(fin.readframes(fin.getnframes()), np.int16)
+    fin.close()
+
+    transcripts = []
+
+    transcripts.append("")
+    transcripts.append(deepspeech(audio, use_scorer=True))
+    print(f"Deepspeech with LM: `{transcripts[-1]}`")
+    transcripts.append(deepspeech(audio))
+    print(f"Deepspeech: `{transcripts[-1]}`")
+    return tuple(transcripts)
+    
 
 def _convert_audio(audio_data: np.array, sample_rate: int):
+    audio_limit = sample_rate * 60 * 2 # limit audio to 2 minutes max
+    if audio_data.shape[0] > audio_limit: 
+        audio_data = audio_data[0:audio_limit]
     source_audio = BytesIO()
     source_audio.write(audio_data)
     source_audio.seek(0)
@@ -76,23 +76,20 @@ def _convert_audio(audio_data: np.array, sample_rate: int):
     output_audio.seek(0)
     return output_audio
 
+with open("README.md") as file:
+    article = file.read()
 
 iface = gr.Interface(
-    fn=stt,
+    fn=inference,
     inputs=[
         gr.inputs.Audio(type="numpy",
-                        label=None, optional=False),
-        gr.inputs.Radio(
-            label="Виберіть Speech-to-Text модель",
-            choices=MODEL_NAMES,
-        ),
-
+                        label="Аудіо", optional=False),
     ],
-    outputs=gr.outputs.Textbox(label="Output"),
-    title="🐸🇺🇦 - Coqui STT",
+    outputs=[gr.outputs.Textbox(label="Wav2Vec2"), gr.outputs.Textbox(label="DeepSpeech with LM"), gr.outputs.Textbox(label="DeepSpeech")],
+    title="🇺🇦 Ukrainian Speech-to-Text models",
     theme="huggingface",
     description="Україномовний🇺🇦 Speech-to-Text за допомогою Coqui STT",
-    article="Якщо вам подобається, підтримайте за посиланням: [SUPPORT LINK](https://send.monobank.ua/jar/48iHq4xAXm)",
+    article=article,
 )
 
 download(model_link, model_name)

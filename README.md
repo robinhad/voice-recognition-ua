@@ -4,6 +4,7 @@ emoji: 🐌
 colorFrom: blue
 colorTo: yellow
 sdk: gradio
+sdk_version: 3.2
 app_file: app.py
 pinned: false
 ---
@@ -12,6 +13,7 @@ pinned: false
 This is a repository with aim to apply various speech recognition models on Ukrainian language.  
 
 You can see online demo here: https://huggingface.co/spaces/robinhad/ukrainian-stt.  
+Github link: https://github.com/robinhad/voice-recognition-ua.  
 Source code is in this repository together with auto-deploy pipeline scripts. 
 
 
@@ -29,6 +31,9 @@ If you'd like to check out different models for Ukrainian language, please visit
 
 # 🤖 Training scripts
 Guides for training are available in corresponding folders for each model.
+
+# Support
+If you like my work, please support here: https://send.monobank.ua/jar/48iHq4xAXm
 
 # 🤝 Attribution
 [@robinhad](https://github.com/robinhad) - model training. 
