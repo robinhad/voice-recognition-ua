@@ -94,6 +94,7 @@ def _convert_audio(audio_data: np.array, sample_rate: int):
 
 with open("README.md") as file:
     article = file.read()
+    article = article[article.find("---\n", 4) + 5::]
 
 iface = gr.Interface(
     fn=inference,
