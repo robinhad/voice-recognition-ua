@@ -1,2 +1,0 @@
--r requirements.txt
-gradio==3.2
