@@ -2,4 +2,4 @@ STT==1.4.0
 transformers==4.22.1
 pydub==0.25.1
 torch>=1.12
-gradio==3.16.1
+gradio==3.41.2

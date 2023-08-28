@@ -85,7 +85,7 @@ def _convert_audio(audio_data: np.array, sample_rate: int):
     wav_file: AudioSegment = AudioSegment.from_raw(
         source_audio,
         channels=1,
-        sample_width=4,
+        sample_width=audio_data.dtype.itemsize,
         frame_rate=sample_rate
     )
     wav_file.export(output_audio, "wav", codec="pcm_s16le", parameters=["-ar", "16k"])
